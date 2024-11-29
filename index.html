@@ -1,46 +1,171 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Jogo de Adivinhação de Frutas com Timer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            margin: 0;
+        }
+        .game-container {
+            text-align: center;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        select {
+            padding: 10px;
+            font-size: 16px;
+            width: 180px;
+            margin: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        .result {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        .timer {
+            font-size: 20px;
+            color: #ff0000;
+        }
 
-    
+        /* Animações */
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes shake {
+            0% {
+                transform: translateX(0);
+            }
+            25% {
+                transform: translateX(-10px);
+            }
+            50% {
+                transform: translateX(10px);
+            }
+            75% {
+                transform: translateX(-10px);
+            }
+            100% {
+                transform: translateX(0);
+            }
+        }
+
+        .pulse-animation {
+            animation: pulse 0.6s ease-in-out;
+        }
+
+        .shake-animation {
+            animation: shake 0.6s ease-in-out;
+        }
+    </style>
 </head>
-<script>
-    const terrinhas = [  "Salvador" , "Fortaleza" , "Recife" , "São Luis" , "Natal" ]
-    document.write (terrinhas)
-    ordenar()
-    ordenar_reversa()
-    buscar()
-
-
-
-    function ordenar  () {  // orderna 
-    document.write ("<br>", terrinhas.sort(), "<br>")  
-    }
-
-    function ordenar_reversa  () { // ordem reversa 
-    document.write ("<br>",     terrinhas.reverse(), "<br>")  
-    }
-
-    function buscar() {
-    let buscador = prompt (" escolha uma cidade")  
-    // document.write (buscador)   
-    // document.write ("<br>",terrinhas.includes(buscador),"<br>" ) 
-
-    if (terrinhas.includes(buscador)){ 
-        document.write ("encontrado")   
-
-
-    } else {
-        document.write (" não encontrado")   
-
-    }
-
-    }
-</script>
 <body>
-     
+    <div class="game-container">
+        <h1>Jogo de Adivinhação de Frutas</h1>
+        <p>Escolha uma fruta:</p>
+        <select id="guess">
+            <option value="">Selecione uma fruta</option>
+            <option value="maçã">Maçã</option>
+            <option value="banana">Banana</option>
+            <option value="laranja">Laranja</option>
+            <option value="uva">Uva</option>
+            <option value="abacaxi">Abacaxi</option>
+        </select>
+        <br>
+        <button onclick="checkGuess()">Adivinhar</button>
+        <p id="timer" class="timer">Tempo restante: 10s</p>
+        <p id="result" class="result"></p>
+    </div>
+
+    <!-- Som de sucesso (opcional, mas adicionei para completar) -->
+    <audio id="success-sound" src="https://www.soundjay.com/button/beep-07.wav" preload="auto"></audio>
+
+    <script>
+        // Lista de frutas
+        const frutas = ["maçã", "banana", "laranja", "uva", "abacaxi"];
+        
+        // Seleciona uma fruta aleatória da lista
+        let targetFruit = frutas[Math.floor(Math.random() * frutas.length)];
+        let timeLeft = 20;  // Tempo de 30 segundos para adivinhar
+        let timerInterval;
+        
+        // Exibe o timer na tela
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer').textContent = `Tempo restante: ${timeLeft}s`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    document.getElementById('result').textContent = "Tempo esgotado! Você perdeu.";
+                    document.getElementById('guess').disabled = true;
+                }
+            }, 1000);
+        }
+
+        // Função para checar a adivinhação
+        function checkGuess() {
+            const userGuess = document.getElementById('guess').value.toLowerCase().trim();
+            const resultElement = document.getElementById('result');
+            
+            if (userGuess === targetFruit) {
+                clearInterval(timerInterval);
+                resultElement.textContent = "Você acertou! Parabéns!";
+                
+                // Tocar o som de sucesso
+                const successSound = document.getElementById('success-sound');
+                successSound.play();
+
+                // Adiciona animação de "pulse"
+                resultElement.classList.add('pulse-animation');
+                setTimeout(() => {
+                    resultElement.classList.remove('pulse-animation');
+                }, 600); // Duração da animação
+
+            } else if (userGuess === "") {
+                resultElement.textContent = "Por favor, escolha uma fruta.";
+            } else {
+                resultElement.textContent = "Tente novamente!";
+
+                // Adiciona animação de "shake"
+                resultElement.classList.add('shake-animation');
+                setTimeout(() => {
+                    resultElement.classList.remove('shake-animation');
+                }, 600); // Duração da animação
+            }
+        }
+
+        // Inicia o timer assim que a página for carregada
+        window.onload = function() {
+            startTimer();
+        }
+    </script>
 </body>
 </html>
