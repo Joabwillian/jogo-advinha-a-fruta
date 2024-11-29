@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    
+</head>
+<script>
+    const terrinhas = [  "Salvador" , "Fortaleza" , "Recife" , "São Luis" , "Natal" ]
+    document.write (terrinhas)
+    ordenar()
+    ordenar_reversa()
+    buscar()
+
+
+
+    function ordenar  () {  // orderna 
+    document.write ("<br>", terrinhas.sort(), "<br>")  
+    }
+
+    function ordenar_reversa  () { // ordem reversa 
+    document.write ("<br>",     terrinhas.reverse(), "<br>")  
+    }
+
+    function buscar() {
+    let buscador = prompt (" escolha uma cidade")  
+    // document.write (buscador)   
+    // document.write ("<br>",terrinhas.includes(buscador),"<br>" ) 
+
+    if (terrinhas.includes(buscador)){ 
+        document.write ("encontrado")   
+
+
+    } else {
+        document.write (" não encontrado")   
+
+    }
+
+    }
+</script>
+<body>
+     
+</body>
+</html>
